@@ -1,8 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { NATS_SERVICE } from 'src/config';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class AuthService {
-  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
+export class AuthService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger('AuthService');
+
+  onModuleInit() {
+    this.$connect();
+    this.logger.log('MongoDB connected');
+  }
 }
